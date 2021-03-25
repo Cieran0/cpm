@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
- 
+#include <string.h> 
 #include <curl/curl.h>
  
 static size_t write_data(void *ptr, size_t size, size_t nmemb, void *stream)
@@ -10,10 +10,10 @@ static size_t write_data(void *ptr, size_t size, size_t nmemb, void *stream)
   return written;
 }
  
-int download(char *pkg, char *pkgname)
+int download(char *url, char *location)
 {
   CURL *curl_handle;
-  FILE *pkgfile; 
+  FILE *file; 
  
   curl_global_init(CURL_GLOBAL_ALL);
  
@@ -21,7 +21,7 @@ int download(char *pkg, char *pkgname)
   curl_handle = curl_easy_init();
  
   /* set URL to get here */ 
-  curl_easy_setopt(curl_handle, CURLOPT_URL, pkg);
+  curl_easy_setopt(curl_handle, CURLOPT_URL, url);
  
   /* Switch on full protocol/debug output while testing  
   curl_easy_setopt(curl_handle, CURLOPT_VERBOSE, 1L);
@@ -34,17 +34,17 @@ int download(char *pkg, char *pkgname)
   curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, write_data);
  
   /* open the file */ 
-  pkgfile = fopen(pkgname, "wb");
-  if(pkgfile) {
+  file = fopen(location, "wb");
+  if(file) {
  
     /* write the page body to this file handle */ 
-    curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, pkgfile);
+    curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, file);
  
     /* get it! */ 
     curl_easy_perform(curl_handle);
  
     /* close the header file */ 
-    fclose(pkgfile);
+    fclose(file);
   }
  
   /* cleanup curl stuff */ 
@@ -55,12 +55,19 @@ int download(char *pkg, char *pkgname)
   return 0;
 }
 
-int main() 
+int main(int argc, char *argsv[]) 
 {
-    char *url = "https://curl.se/libcurl/c/url2file.html";
-    char *file = "../based.txt";
+    char *repoUrl = " ";
 
-    download(url , file);
+    if(strncmp("install",argsv[1],7) == 0)
+    {
+        download(argsv[2] , argsv[3]);
+    }
+    else if(argsv[1] == "update")
+    {
+	printf("\n k gaymer \n");
+    }
+    else {printf("gay"); }
 
     return 0;
 }
