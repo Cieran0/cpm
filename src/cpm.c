@@ -63,7 +63,7 @@ int main(int argc, char *argsv[])
     {
         download(argsv[2] , argsv[3]);
     }
-    else if(argsv[1] == "update")
+    else if(strncmp("update",argsv[1],6) == 0)
     {
 	printf("\n k gaymer \n");
     }
