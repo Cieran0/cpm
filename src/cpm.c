@@ -5,6 +5,7 @@
 #include <curl/curl.h>
 
 #define repoUrl "https://raw.githubusercontent.com/Cieran0/cpm-repo/main/";
+#define bin "/bin/"
 
 static size_t write_data(void *ptr, size_t size, size_t nmemb, void *stream)
 {
@@ -12,13 +13,15 @@ static size_t write_data(void *ptr, size_t size, size_t nmemb, void *stream)
   	return written;
 }
  
-int download(char *pkg, char *location)
+int download(char *pkg)
 {
 	CURL *curl_handle;
 	FILE *file; 
  
 	char url[100] = repoUrl;
 	strcat(url,pkg);
+	char *location = bin;
+	strcat(location,pkg);
 
   	curl_global_init(CURL_GLOBAL_ALL);
  
@@ -69,7 +72,7 @@ int main(int argc, char *argsv[])
 
     	if(strncmp("install",argsv[1],7) == 0)
     	{
-    	    download(argsv[2] , argsv[3]);
+    	    download(argsv[2]);
     	}
     	else if(strncmp("update",argsv[1],6) == 0)
     	{
