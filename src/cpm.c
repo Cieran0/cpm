@@ -6,6 +6,7 @@
 
 #define repoUrl "https://raw.githubusercontent.com/Cieran0/cpm-repo/main/";
 #define bin "/bin/"
+#define chmod "chmod 755 "
 
 static size_t write_data(void *ptr, size_t size, size_t nmemb, void *stream)
 {
@@ -20,8 +21,10 @@ int download(char *pkg)
  
 	char url[100] = repoUrl;
 	strcat(url,pkg);
-	char *location = bin;
+	char location[100] = bin;
 	strcat(location,pkg);
+	char perms[100] = chmod;
+	strcat(perms,location);
 
   	curl_global_init(CURL_GLOBAL_ALL);
  
@@ -59,7 +62,9 @@ int download(char *pkg)
   	curl_easy_cleanup(curl_handle);
  
   	curl_global_cleanup();
- 
+ 		
+	system(perms);
+
   	return 0;
 }
 
